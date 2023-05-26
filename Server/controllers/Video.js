@@ -75,7 +75,7 @@ export const addView = async(req, res, next)=>{
 export const random = async(req, res, next)=>{
     // const newVideo = new Video({userId:req.user.id, ...req.body});
     try{
-        const video = await Video.aggregate([]);
+        const video = await Video.aggregate([{$sample:{size:40}}]);
         res.status(200).json(video)
     }
     catch(err){
@@ -84,7 +84,6 @@ export const random = async(req, res, next)=>{
 }
 
 export const trends = async(req, res, next)=>{
-    // const newVideo = new Video({userId:req.user.id, ...req.body});
     try{
         const video = await Video.findById(req.params.id);
         res.status(200).json(video)
@@ -95,12 +94,11 @@ export const trends = async(req, res, next)=>{
 }
 
 export const subscribes = async(req, res, next)=>{
-    // const newVideo = new Video({userId:req.user.id, ...req.body});
     try{
         const user = await User.findById(req.params.id);
-        const subscribedChannels = User.SubscribedUsers;
+        const subscribedChannels = User.SubscribedUsers||[];
 
-        const list = Promise.all(
+        const list = await Promise.all(
             subscribedChannels.map((channelId)=>{
                 return  Video.find({userId: channelId})
             })

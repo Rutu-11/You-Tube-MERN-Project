@@ -10,6 +10,6 @@ router.delete("/:id",varifyToken, addVideo);
 router.get("/find/:id",varifyToken, addVideo);
 router.put("/view/:id", addView)
 // router.get("/trends", trends)
-// router.get("/random", random)
+router.get("/random", random)
 router.get("/sub", subscribes)
 export default router;
